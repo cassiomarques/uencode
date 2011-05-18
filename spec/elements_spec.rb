@@ -434,7 +434,7 @@ describe UEncode::Job do
     end
 
     it "has the correct customer key value" do
-      xml.xpath("//job/customerkey").text.should == "1234567890"
+      xml.xpath("//job/customerkey").text.should == "1q2w3e4r5t"
     end
 
     it "has the correct source attribute" do
