@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'singleton'
 require 'nokogiri'
+require 'typhoeus'
 
 module Uencode
   class << self
@@ -30,3 +31,5 @@ module Uencode
 end
 
 require "uencode/elements"
+require "uencode/request"
+require "uencode/response"

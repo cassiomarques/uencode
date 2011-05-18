@@ -28,4 +28,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "webmock"
 
   s.add_dependency "nokogiri", "1.4.4"
+  s.add_dependency "typhoeus"
 end
