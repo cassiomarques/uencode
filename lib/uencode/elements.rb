@@ -213,7 +213,7 @@ module Uencode
     end
 
     def to_xml
-      %Q{
+      xml = %Q{
         <job>
           <customerkey>#{Uencode.customer_key}</customerkey>
           <source>#{source}</source>
@@ -225,6 +225,7 @@ module Uencode
           </outputs>
         </job>
       }
+      Nokogiri::XML(xml).to_xml
     end
   end
 
