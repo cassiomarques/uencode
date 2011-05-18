@@ -1,14 +1,17 @@
-module Uencode
+module UEncode
   class Request
-    ENDPOINT = "https://www.uencode.com/jobs?version=300"
+    include HTTParty
 
+    base_uri "https://www.uencode.com"
+    format :xml
+    
     def initialize(job)
       @job = job
     end
 
     def send
-      response_xml = Typhoeus::Request.put(ENDPOINT, :body => @job.to_xml)
-      parse_response response_xml
+      response = self.class.put "/jobs?version=300", :body => @job.to_xml
+      parse_response response
     end
 
     private

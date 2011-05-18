@@ -1,0 +1,87 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :put
+    uri: https://www.uencode.com:443/jobs?version=300
+    body: |
+      <?xml version="1.0"?>
+      <job>
+                <customerkey>1q2w3e4r5t</customerkey>
+                <source>http://dailydigital-files.s3.amazonaws.com/staging/3/iphone.mp4</source>
+                <userdata>This is a simple test</userdata>
+                
+                <outputs>
+                  
+              <output>
+                <video>
+                  <destination>http://dailydigital-files.s3.amazonaws.com/staging/3/iphone_transcoded.mp4</destination>
+                  <container>mpeg4</container>
+                  <media>
+                    
+              <medium>
+                <video>
+                  <bitrate>300000</bitrate>
+                  <codec>h264</codec>
+                  <cbr>false</cbr>
+                  
+                  <deinterlace>false</deinterlace>
+                  
+                  
+                  
+                  
+                  
+                  <profile>main</profile>
+                  <passes>1</passes>
+                  
+                  
+                </video>
+                <audio>
+                  <codec>aac</codec>
+                  <bitrate>64000</bitrate>
+                  <channels>1</channels>
+                  <samplerate>44100</samplerate>
+                </audio>
+              </medium>
+            
+                  </media>
+                </video>
+              </output>
+            
+                  
+                </outputs>
+              </job>
+
+    headers: 
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: OK
+    headers: 
+      date: 
+      - Wed, 18 May 2011 21:25:41 GMT
+      server: 
+      - Apache/2.2.16 (Ubuntu)
+      etag: 
+      - "\"1c1e90e26e3f60eeb74014a6aeb5ac22\""
+      cache-control: 
+      - max-age=0, private, must-revalidate
+      x-ua-compatible: 
+      - IE=Edge,chrome=1
+      set-cookie: 
+      - _uencode_api_session=BAh7BiIPc2Vzc2lvbl9pZCIlOWM4ZWM4ZGUxMzNiNTNiNWZiOWMwMDA4ODkzMmY3ZWI%3D--697ce08be3ca2a9f6347474fe7fe5476333e9408; path=/; HttpOnly
+      x-runtime: 
+      - "1.007000"
+      content-length: 
+      - "202"
+      content-type: 
+      - application/xml;charset=utf-8
+    body: |
+      <?xml version="1.0" encoding="UTF-8"?>
+      <response>
+        <code>Ok</code>
+        <jobid>6068</jobid>
+        <message>You job was created successfully.</message>
+        <userdata>This is a simple test</userdata>
+      </response>
+
+    http_version: "1.1"

@@ -4,7 +4,7 @@ require "uencode/version"
 
 Gem::Specification.new do |s|
   s.name        = "uencode"
-  s.version     = Uencode::VERSION
+  s.version     = UEncode::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Cássio Marques"]
   s.email       = ["cassiommc@gmail.com"]
@@ -28,5 +28,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "webmock"
 
   s.add_dependency "nokogiri", "1.4.4"
-  s.add_dependency "typhoeus"
+  s.add_dependency "httparty"
 end

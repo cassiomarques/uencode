@@ -3,9 +3,9 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'singleton'
 require 'nokogiri'
-require 'typhoeus'
+require 'httparty'
 
-module Uencode
+module UEncode
   class << self
     attr_accessor :customer_key
 

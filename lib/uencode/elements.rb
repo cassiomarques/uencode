@@ -1,4 +1,4 @@
-module Uencode
+module UEncode
   class Crop
     ATTRIBUTES = [:width, :height, :x, :y]
 
@@ -215,7 +215,7 @@ module Uencode
     def to_xml
       xml = %Q{
         <job>
-          <customerkey>#{Uencode.customer_key}</customerkey>
+          <customerkey>#{UEncode.customer_key}</customerkey>
           <source>#{source}</source>
           #{userdata.nil? ? "" : '<userdata>' + userdata + '</userdata>'}
           #{notify.nil? ? "" : '<notify>' + notify + '</notify>'}

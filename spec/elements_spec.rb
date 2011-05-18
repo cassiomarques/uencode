@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Uencode::Medium do
-  let(:medium) { Uencode::Medium.new }
+describe UEncode::Medium do
+  let(:medium) { UEncode::Medium.new }
 
   before :each do
     medium.configure_video do |c|
@@ -10,7 +10,7 @@ describe Uencode::Medium do
       c.cbr               = false
       c.crop              = nil
       c.deinterlace       = true
-      c.framerate         = Uencode::FrameRate.new :numerator => 1000, :denominator => 1001
+      c.framerate         = UEncode::FrameRate.new :numerator => 1000, :denominator => 1001
       c.height            = 500
       c.keyframe_interval = 0
       c.maxbitrate        = 10000
@@ -30,7 +30,7 @@ describe Uencode::Medium do
   end
 
   describe "#configure_video" do
-    let(:medium) { Uencode::Medium.new }
+    let(:medium) { UEncode::Medium.new }
 
     it { medium.video.bitrate.should == 10000 }
     it { medium.video.codec.should == "mp4" }
@@ -49,7 +49,7 @@ describe Uencode::Medium do
   end
 
   describe "#configure_audio" do
-    let(:medium) { Uencode::Medium.new }
+    let(:medium) { UEncode::Medium.new }
 
     it { medium.audio.codec.should == "aac" }
     it { medium.audio.bitrate.should == 15000 }
@@ -72,8 +72,8 @@ describe Uencode::Medium do
 
     before :each do
       medium.configure_video do |c|
-        c.crop = Uencode::Crop.new :width => 125, :height => 150, :x => 100, :y => 200
-        c.par = Uencode::Par.new :numerator => 10, :denominator => 11
+        c.crop = UEncode::Crop.new :width => 125, :height => 150, :x => 100, :y => 200
+        c.par = UEncode::Par.new :numerator => 10, :denominator => 11
       end
     end
 
@@ -165,7 +165,6 @@ describe Uencode::Medium do
 
     it "does not include the stretch video config when it's false" do
       medium.configure_video { |c|  c.stretch = false }
-      puts medium.to_xml
       Nokogiri::XML(medium.to_xml) .xpath("//video/stretch").should be_empty
     end
 
@@ -193,7 +192,7 @@ describe Uencode::Medium do
   end
 end
 
-describe Uencode::VideoOutput do
+describe UEncode::VideoOutput do
   subject { described_class.new :destination => "http://foobar.com/bla.avi", :container => "mpeg4" }
 
   its(:destination) { should == "http://foobar.com/bla.avi" }
@@ -219,7 +218,7 @@ describe Uencode::VideoOutput do
   end
 end
 
-describe Uencode::CaptureOutput do
+describe UEncode::CaptureOutput do
   subject { described_class.new({
     :destination => "http://whatever.com/foo.jpg",
     :rate => "at 20s",
@@ -237,8 +236,8 @@ describe Uencode::CaptureOutput do
   end
 
   describe "#to_xml" do
-    let(:crop) { Uencode::Crop.new :width => 125, :height => 140, :x => 100, :y => 200 }
-    let(:size) { Uencode::Size.new :width => 400, :height => 500 }
+    let(:crop) { UEncode::Crop.new :width => 125, :height => 140, :x => 100, :y => 200 }
+    let(:size) { UEncode::Size.new :width => 400, :height => 500 }
      let(:xml) {
        Nokogiri::XML described_class.new(
          :destination => "http://foo.com/bla.mp4",
@@ -273,7 +272,7 @@ describe Uencode::CaptureOutput do
   end
 end
 
-describe Uencode::Crop do
+describe UEncode::Crop do
   subject { described_class.new :width => 100, :height => 200, :x => 100, :y => 150 }
 
   its(:width) { should == 100 }
@@ -329,7 +328,7 @@ shared_examples_for "an element that represents a rate number" do
   end  
 end
 
-describe Uencode::FrameRate do
+describe UEncode::FrameRate do
   let(:name) { "framerate" }
   let(:numerator) { 1000 }
   let(:denominator) { 1001 }
@@ -337,7 +336,7 @@ describe Uencode::FrameRate do
   it_should_behave_like "an element that represents a rate number"
 end
 
-describe Uencode::Par do
+describe UEncode::Par do
   let(:name) { "par" }
   let(:numerator) { 10 }
   let(:denominator) { 11 }
@@ -345,7 +344,7 @@ describe Uencode::Par do
   it_should_behave_like "an element that represents a rate number"
 end
 
-describe Uencode::Size do
+describe UEncode::Size do
   subject { described_class.new :width => 100, :height => 200 }
 
   its(:height) { should == 200 }
@@ -368,7 +367,7 @@ describe Uencode::Size do
   end
 end
 
-describe Uencode::Job do
+describe UEncode::Job do
   subject { described_class.new :source => "http://foo.com/bar.avi", :userdata => "some text", :notify => "http://my_url.com" }
 
   its(:source) { should == "http://foo.com/bar.avi" }
@@ -390,7 +389,7 @@ describe Uencode::Job do
   end
 
   describe "#to_xml" do
-    let(:job) { Uencode::Job.new({
+    let(:job) { UEncode::Job.new({
       :customerkey => "0123456789",
       :source      => "http://whatever.com/foo.avi",
       :userdata    => "some text",
@@ -400,7 +399,7 @@ describe Uencode::Job do
     let(:xml) { Nokogiri::XML job.to_xml }
 
     before :each do
-      video1 = Uencode::Medium.new
+      video1 = UEncode::Medium.new
       video1.configure_video do |c|
         c.bitrate = 1000
         c.codec   = 'mp4'
@@ -408,7 +407,7 @@ describe Uencode::Job do
       video1.configure_audio do |c|
         c.codec = 'aac'
       end
-      video2 = Uencode::Medium.new
+      video2 = UEncode::Medium.new
       video2.configure_video do |c|
         c.bitrate = 1500
         c.codec   = 'mpeg2'
@@ -424,9 +423,9 @@ describe Uencode::Job do
         c.container   = "mpeg4"
       end
 
-      capture1 = Uencode::CaptureOutput.new :destination => "http://whatever.com/foo.zip", :rate => "every 30s"
+      capture1 = UEncode::CaptureOutput.new :destination => "http://whatever.com/foo.zip", :rate => "every 30s"
       job.add_capture capture1
-      capture2 = Uencode::CaptureOutput.new :destination => "http://whatever.com/bar.zip", :rate => "every 10s"
+      capture2 = UEncode::CaptureOutput.new :destination => "http://whatever.com/bar.zip", :rate => "every 10s"
       job.add_capture capture2
     end
 
