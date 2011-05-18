@@ -46,7 +46,7 @@ puts response.userdata # => 'This is a simple test'
 
 Currently all the uEncode API parameters are supported (or so I think :)
 
-Currently the gem does not validate parameters' values, so pay attention at the API docs.
+Currently the gem does not validate parameters values, so pay attention to the API docs.
 
 You can see the whole list of accepted parameters in the [uEncode API documentation](http://www.uencode.com/api/300#response_codes).
 
