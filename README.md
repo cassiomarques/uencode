@@ -52,6 +52,10 @@ You can see the whole list of accepted parameters in the [uEncode API documentat
 
 For the UEncode classes that map to each complex API parameters (like Crop, Size, FrameRate, etc) take a look at the spec file at /spec/elements_spec.rb or read the docs.
 
+## Credits
+
+This gem was created during my work to integrate the uEncode API in our application at [DailyDigital](http://www.dailydigital.com). Thanks for letting me open source it!
+
 ## Running the specs
 
 * bundle install
