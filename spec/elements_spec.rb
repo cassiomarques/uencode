@@ -100,7 +100,6 @@ describe Uencode::Medium do
       config.xpath("//par/denominator").text.should == "11"
       config.xpath("//profile").text.should == "baseline"
       config.xpath("//passes").text.should == "1"
-      config.xpath("//stretch").text.should == "false"
       config.xpath("//video/width").text.should == "400"
     end
 
@@ -162,6 +161,12 @@ describe Uencode::Medium do
     it "does not include the width video config when it's null" do
       medium.configure_video { |c| c.width = nil }
       Nokogiri::XML(medium.to_xml).xpath("//video/width").should be_empty
+    end
+
+    it "does not include the stretch video config when it's false" do
+      medium.configure_video { |c|  c.stretch = false }
+      puts medium.to_xml
+      Nokogiri::XML(medium.to_xml) .xpath("//video/stretch").should be_empty
     end
 
     it "has the correct audio configs" do

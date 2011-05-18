@@ -7,12 +7,13 @@ module Uencode
     end
 
     def send
-      response_xml = Typhoeus::Request.put(ENDPOINT, :body => job.to_xml)
+      response_xml = Typhoeus::Request.put(ENDPOINT, :body => @job.to_xml)
+      parse_response response_xml
     end
 
     private
     def parse_response(response_xml)
-      doc      = Nokogir::XML response_xml.body
+      doc      = Nokogiri::XML response_xml.body
       code     = doc.xpath("//code").text
       message  = doc.xpath("//message").text
       jobid    = doc.xpath("//jobid").text

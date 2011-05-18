@@ -148,7 +148,7 @@ module Uencode
             #{video.par ? video.par.to_xml : ""}
             #{video.profile.nil? ? "" : '<profile>' + video.profile + '</profile>'}
             #{video.passes.nil? ? "" : '<passes>' + video.passes.to_s + '</passes>'}
-            #{video.stretch.nil? ? "" : '<stretch>' + video.stretch.to_s + '</stretch>'}
+            #{[nil, false].include?(video.stretch) ? "" : '<stretch>' + video.stretch.to_s + '</stretch>'}
             #{video.width.nil? ? "" : '<width>' + video.width.to_s + '</width>'}
           </video>
           <audio>
