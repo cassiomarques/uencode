@@ -10,3 +10,7 @@ VCR.config do |c|
   c.allow_http_connections_when_no_cassette = false
   c.ignore_localhost = true
 end
+
+Uencode.configure do |c|
+  c.customer_key = "1234567890"
+end
