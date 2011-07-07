@@ -33,7 +33,7 @@ capture = UEncode::CaptureOutput.new :destination => "http://whatever.com/foo.zi
 job.add_capture capture
 
 request = UEncode::Request.new job
-puts job.to_xml
+
 response = request.send
 
 puts response.code # => 'Ok'
