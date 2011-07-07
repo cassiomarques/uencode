@@ -31,6 +31,9 @@ describe UEncode::Medium do
 
   describe "#configure_video" do
     let(:medium) { UEncode::Medium.new }
+    let(:config) { YAML::load_file("spec/fixtures/configuration.yaml") }
+    let(:video_config) { config["video"] }
+    let(:audio_config) { config["audio"] }
 
     it { medium.video.bitrate.should == 10000 }
     it { medium.video.codec.should == "mp4" }
@@ -46,6 +49,36 @@ describe UEncode::Medium do
     it { medium.video.passes.should == 1 }
     it { medium.video.stretch.should == false }
     it { medium.video.width.should == 400 }
+
+    context "from a hash (video parameters)" do
+      before { medium.configure config }
+      subject { medium.video_config }
+
+      its(:bitrate) { should == video_config["bitrate"] }
+      its(:codec) { should == video_config["codec"] }
+      its(:cbr) { should == video_config["cbr"] }
+      its(:crop) { should == video_config["crop"] }
+      its(:deinterlace) { should == video_config["deinterlace"] }
+      its(:framerate) { should == video_config["framerate"] }
+      its(:height) { should == video_config["height"] }
+      its(:keyframe_interval) { should == video_config["keyframe_interval"] }
+      its(:maxbitrate) { should == video_config["maxbitrate"] }
+      its(:par) { should == video_config["par"] }
+      its(:profile) { should == video_config["profile"] }
+      its(:passes) { should == video_config["passes"] }
+      its(:stretch) { should == video_config["stretch"] }
+      its(:width) { should == video_config["width"] }
+    end
+
+    context "from a hash (audio parameters)" do
+      before { medium.configure config }
+      subject { medium.audio_config }
+
+      its(:codec) { should == audio_config["codec"] }
+      its(:bitrate) { should == audio_config["bitrate"] }
+      its(:channels) { should == audio_config["channels"] }
+      its(:samplerate) { should == audio_config["samplerate"] }
+    end
   end
 
   describe "#configure_audio" do

@@ -111,9 +111,38 @@ module UEncode
 
   # Medium is a single video to transcode
   class Medium
+    attr_reader :video_config, :audio_config
+
     def initialize
       @video_config = VideoConfig.new
       @audio_config = AudioConfig.new
+    end
+
+    # Configures the transcoding using a nested hash with the following format:
+    #
+    #   config = {"video" => { ... }, "audio" => { ... }
+    #
+    # The keys for the "video" hash can be any of the following: bitrate, codec, cbr, crop, 
+    # deinterlace, framerate, height, keyframe_interval, maxbitrate, par, profile, passes,
+    # stretch, width.
+    #
+    # The "framerate" and "par" values must be also hashes, with the following format:
+    #
+    #   {"numerator" => 10, "denominator" => 11}
+    #
+    # The keys for the "audio" hash can be any of the following:
+    # codec, bitrate, channels, samplerate.
+    #   
+    def configure(hash)
+      video = hash["video"]
+      audio = hash["audio"]      
+      configure_video do |c|
+        video.each_pair { |key, value| c.send("#{key}=", value) }
+      end
+
+      configure_audio do |c|
+        audio.each_pair { |key, value| c.send("#{key}=", value) }
+      end
     end
 
     def configure_video
@@ -185,6 +214,10 @@ module UEncode
     ATTRIBUTES = [:source, :userdata, :notify]
 
     include Enumerable
+
+    def self.from_hash(hash)
+      new({})
+    end
 
     def initialize(options)
       @video_output = VideoOutput.new options[:video_output] || {}

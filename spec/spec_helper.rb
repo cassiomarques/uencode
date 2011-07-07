@@ -3,7 +3,6 @@ require 'rspec'
 require 'rspec/autorun'
 require "vcr"
 
-
 VCR.config do |c|
   library_dir = File.join(File.dirname(__FILE__), 'fixtures/')
   c.cassette_library_dir = library_dir
