@@ -29,5 +29,4 @@ Gem::Specification.new do |s|
 
   s.add_dependency "nokogiri", "1.4.4"
   s.add_dependency "httparty"
-  s.add_dependency "rake"
 end
