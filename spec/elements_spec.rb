@@ -51,19 +51,20 @@ describe UEncode::Medium do
     it { medium.video.width.should == 400 }
 
     context "from a hash (video parameters)" do
-      before { medium.configure config }
       subject { medium.video_config }
+
+      before { medium.configure config }
 
       its(:bitrate) { should == video_config["bitrate"] }
       its(:codec) { should == video_config["codec"] }
       its(:cbr) { should == video_config["cbr"] }
       its(:crop) { should == video_config["crop"] }
       its(:deinterlace) { should == video_config["deinterlace"] }
-      its(:framerate) { should == video_config["framerate"] }
+      its(:framerate) { should == UEncode::FrameRate.new(video_config["framerate"]) }
       its(:height) { should == video_config["height"] }
       its(:keyframe_interval) { should == video_config["keyframe_interval"] }
       its(:maxbitrate) { should == video_config["maxbitrate"] }
-      its(:par) { should == video_config["par"] }
+      its(:par) { should == UEncode::Par.new(video_config["par"]) }
       its(:profile) { should == video_config["profile"] }
       its(:passes) { should == video_config["passes"] }
       its(:stretch) { should == video_config["stretch"] }
@@ -359,6 +360,26 @@ shared_examples_for "an element that represents a rate number" do
       xml.xpath("//denominator").text.should == denominator.to_s
     end
   end  
+end
+
+describe UEncode::VideoConfig do
+  let(:config) { described_class.new }
+
+  context "receiving a hash as the framerate" do
+    before { config.framerate = {:numerator => 123, :denominator => 345} }
+      
+    it "converts it to a UEncode::FrameRate" do
+      config.framerate.should be_an_instance_of(UEncode::FrameRate)
+    end
+
+    it "the framerate has the correct numerator" do
+      config.framerate.numerator.should == 123
+    end
+
+    it "the framerate has the correct denominator" do
+      config.framerate.denominator.should == 345
+    end
+  end
 end
 
 describe UEncode::FrameRate do

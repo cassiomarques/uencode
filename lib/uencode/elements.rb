@@ -28,6 +28,10 @@ module UEncode
   end
 
   module RateElement
+    ATTRIBUTES = [:numerator, :denominator]
+
+    include AttrSetting
+
     def to_xml
       %Q{
         <#{root_name}>
@@ -36,11 +40,14 @@ module UEncode
         </#{root_name}>
       }
     end
+
+    def ==(other)
+      numerator == other.numerator && denominator == other.denominator
+    end
   end
 
   class FrameRate
     include RateElement
-    ATTRIBUTES = [:numerator, :denominator]
 
     private
     def root_name; "framerate"; end
@@ -48,7 +55,6 @@ module UEncode
 
   class Par < FrameRate
     include RateElement
-    ATTRIBUTES = [:numerator, :denominator]
 
     private
     def root_name; "par"; end
@@ -203,6 +209,16 @@ module UEncode
       @passes      = 1
       @stretch     = false
     end
+
+    def framerate=(_framerate)
+      _framerate = FrameRate.new(_framerate) unless _framerate.instance_of?(FrameRate) || _framerate.nil?
+      instance_variable_set :@framerate, _framerate
+    end
+
+    def par=(_par)
+      _par = Par.new(_par) unless _par.instance_of?(Par) || _par.nil?
+      instance_variable_set :@par, _par
+    end
   end
 
   # The audio configs for each Medium
@@ -262,5 +278,5 @@ module UEncode
     end
   end
 
-  [Size, FrameRate, Crop, VideoOutput, CaptureOutput, Job].each { |klass| klass.send :include, AttrSetting }
+  [Size, Crop, VideoOutput, CaptureOutput, Job].each { |klass| klass.send :include, AttrSetting }
 end

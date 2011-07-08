@@ -16,7 +16,7 @@ module UEncode
 
   module AttrSetting
     def set_attributes(options)
-      self.class.const_get("ATTRIBUTES").each { |attr| instance_variable_set(:"@#{attr}", options[attr]) }
+      self.class.const_get("ATTRIBUTES").each { |attr| instance_variable_set(:"@#{attr}", options[attr.to_sym] || options[attr.to_s]) }
     end
 
     def initialize(options)
