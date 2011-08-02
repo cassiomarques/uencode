@@ -1,21 +1,11 @@
 video:
   bitrate: 4500000
   codec: "mp4"
-  width: 1920
-  height: 1080
-  passes: 1
-  maxbitrate: 2000000
+  size: 
+    width: 1920
+    height: 1080
   deinterlace: false
-  cbr: false
-  stretch: false
-  profile: "baseline"
-  framerate: 
-    numerator: 30000
-    denominator: 1001
-  par:
-    numerator: 1
-    denominator: 1
-  keyframe_interval: 60
+  framerate: 30
 audio:
   codec: "aac"
   bitrate: 256000

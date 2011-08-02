@@ -11,16 +11,19 @@ describe UEncode::Request do
   end
 
   describe "#send" do
-    let(:job) { UEncode::Job.new :source => "http://dailydigital-files.s3.amazonaws.com/staging/3/iphone.mp4", :userdata => "This is a simple test" }
+    let(:job) { UEncode::Job.new :source => "http://dailydigital-files.s3.amazonaws.com/staging/3/iphone.mp4", :userdata => "This is a simple test", :callback => "cassiomarques@dailydigital.com" }
     let(:request) { UEncode::Request.new job }
 
     before :each do
-      job.configure_video_output do |c| 
-        c.destination = "http://dailydigital-files.s3.amazonaws.com/staging/3/iphone_transcoded.mp4"
-        c.container   = "mpeg4"
-      end
-      video1 = UEncode::Medium.new
-      video1.configure_video { |c| c.bitrate = 300000; c.codec = "h264"}
+      video1 = UEncode::Video.new(
+        :destination => "http://dailydigital-files.s3.amazonaws.com/staging/3/iphone_transcoded.mp4",
+        :container   => "mpeg4"
+      )
+      video1.configure_video { |c| 
+        c.bitrate = 300000
+        c.codec = "h264"
+        c.size       = UEncode::Size.new(:width => 640, :height => 480)        
+      }
       video1.configure_audio do |c| 
         c.bitrate    = 64000
         c.codec      = "aac"
@@ -28,26 +31,28 @@ describe UEncode::Request do
         c.channels   = 1
       end
       job << video1
+      capture = UEncode::Capture.new(
+        :destination => "http://dailydigital-files.s3.amazonaws.com/staging/3/iphone_capture.jpg",
+        :rate        => "at 60s",
+        :size        => UEncode::Size.new(:width => 640, :height => 480)
+      )
+      job << capture
     end
 
     around :each do |example|
       VCR.use_cassette "job_with_one_video_and_no_capture", &example
     end
 
-    it "returns a response containing the jobid" do
-      request.send.jobid.should =~ /\A\d+\z/
+    it "returns a response containing the key for the transcoding job" do
+      request.send.job_key.should == "68074e2a55912eb4fb092bc6668e6ce3"
     end
 
-    it "returns a response containing a code" do
-      request.send.code.should == 'Ok'
+    it "returns a response containing the status for the job" do
+      request.send.status.should == 'Ok'
     end
 
     it "returns a response containing the previously sent user data" do
       request.send.userdata.should == "This is a simple test"
-    end
-
-    it "returns a response containing a message" do
-      request.send.message.should == "You job was created successfully."
     end
   end
 end

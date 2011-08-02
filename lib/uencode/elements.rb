@@ -1,19 +1,4 @@
 module UEncode
-  class Crop
-    ATTRIBUTES = [:width, :height, :x, :y]
-
-    def to_xml
-      %Q{
-        <crop>
-          <width>#{width}</width>
-          <height>#{height}</height>
-          <x>#{x}</x>
-          <y>#{y}</y>
-        </crop>
-      }
-    end
-  end
-
   class Size
     ATTRIBUTES = [:width, :height]
 
@@ -25,101 +10,37 @@ module UEncode
         </size>
       }
     end
-  end
-
-  module RateElement
-    ATTRIBUTES = [:numerator, :denominator]
-
-    include AttrSetting
-
-    def to_xml
-      %Q{
-        <#{root_name}>
-          <numerator>#{numerator}</numerator>
-          <denominator>#{denominator}</denominator>
-        </#{root_name}>
-      }
-    end
 
     def ==(other)
-      numerator == other.numerator && denominator == other.denominator
+      other.width == width && other.height == height
     end
   end
 
-  class FrameRate
-    include RateElement
-
-    private
-    def root_name; "framerate"; end
-  end
-
-  class Par < FrameRate
-    include RateElement
-
-    private
-    def root_name; "par"; end
-  end
-
-  class CaptureOutput
-    ATTRIBUTES = [:destination, :rate, :stretch, :crop, :size]
+  class Capture
+    ATTRIBUTES = [:destination, :rate, :size]
 
     def initialize(options)
       super
-      @stretch = false if @stretch.nil?
     end
 
     def to_xml
       %Q{
-        <output>
-          <capture>
-            <rate>#{rate}</rate>
-            <destination>#{destination}</destination>
-          #{@crop ? @crop.to_xml : ""}
+        <capture>
+          <rate>#{rate}</rate>
+          <destination>#{destination}</destination>
           #{@size ? @size.to_xml : ""}
-          </capture>
-        <//output>
+        </capture>
       }
     end
   end
 
-  class VideoOutput
+  class Video
     ATTRIBUTES = [:destination, :container]
 
-    include Enumerable
-
-    # a list of Medium
-    attr_reader :items
-    attr_writer :destination, :container
-
-    def initialize(options)
-      @items = []
-      super
-    end
-
-    def each
-      @items.each { |item|  yield item }
-    end
-
-    def to_xml
-      %Q{
-        <output>
-          <video>
-            <destination>#{destination}</destination>
-            <container>#{container}</container>
-            <media>
-              #{@items.inject("") { |s, item| s << item.to_xml }}
-            </media>
-          </video>
-        </output>
-      }
-    end
-  end
-
-  # Medium is a single video to transcode
-  class Medium
     attr_reader :video_config, :audio_config
 
-    def initialize
+    def initialize(options = {})
+      super
       @video_config = VideoConfig.new
       @audio_config = AudioConfig.new
     end
@@ -128,13 +49,10 @@ module UEncode
     #
     #   config = {"video" => { ... }, "audio" => { ... }
     #
-    # The keys for the "video" hash can be any of the following: bitrate, codec, cbr, crop, 
-    # deinterlace, framerate, height, keyframe_interval, maxbitrate, par, profile, passes,
-    # stretch, width.
+    # The keys for the "video" hash can be any of the following: bitrate, codec, 
+    # deinterlace, framerate, size.
     #
-    # The "framerate" and "par" values must be also hashes, with the following format:
-    #
-    #   {"numerator" => 10, "denominator" => 11}
+    # The video size must be specified as a hash containing the 'width' and 'height' keys
     #
     # The keys for the "audio" hash can be any of the following:
     # codec, bitrate, channels, samplerate.
@@ -169,22 +87,15 @@ module UEncode
 
     def to_xml
       %Q{
-        <medium>
+        <video>
+          <destination>#{destination}</destination>
+          <container>#{container}</container>
           <video>
             <bitrate>#{video.bitrate}</birate>
             <codec>#{video.codec}</birate>
-            #{!video.cbr.nil? ? '<cbr>' + video.cbr.to_s + '</cbr>' : ""}
-            #{video.crop ? video.crop.to_xml : ""}
             #{video.deinterlace.nil? ? "" : '<deinterlace>' + video.deinterlace.to_s + '</deinterlace>'}
-            #{video.framerate ? video.framerate.to_xml : ""}
-            #{video.height.nil? ? "" : '<height>' + video.height.to_s + '</height>'}
-            #{video.keyframe_interval.nil? ? "" : '<keyframe_interval>' + video.keyframe_interval.to_s + '</keyframe_interval>'}
-            #{video.maxbitrate.nil? ? "" : '<maxbitrate>' + video.maxbitrate.to_s + '</maxbitrate>'}
-            #{video.par ? video.par.to_xml : ""}
-            #{video.profile.nil? ? "" : '<profile>' + video.profile + '</profile>'}
-            #{video.passes.nil? ? "" : '<passes>' + video.passes.to_s + '</passes>'}
-            #{[nil, false].include?(video.stretch) ? "" : '<stretch>' + video.stretch.to_s + '</stretch>'}
-            #{video.width.nil? ? "" : '<width>' + video.width.to_s + '</width>'}
+            #{video.framerate.nil? ? "" : '<framerate>' + video.framerate.to_s + '</framerate>'}
+            #{video.size.nil? ? "" : video.size.to_xml}
           </video>
           <audio>
             #{audio.codec.nil? ? "" : '<codec>' + audio.codec + '</codec>'}
@@ -192,42 +103,33 @@ module UEncode
             #{audio.channels.nil? ? "" : '<channels>' + audio.channels.to_s + '</channels>'}
             #{audio.samplerate.nil? ? "" : '<samplerate>' + audio.samplerate.to_s + '</samplerate>'}
           </audio>
-        </medium>
+        </video>
       }
     end
   end
 
-  # The video configs for each Medium
   class VideoConfig
-    attr_accessor :bitrate, :codec, :cbr, :crop, :deinterlace, :framerate, :height, :keyframe_interval,
-      :maxbitrate, :par, :profile, :passes, :stretch, :width
+    attr_accessor :bitrate, :codec, :deinterlace, :framerate, :size
 
     def initialize
-      @cbr         = false
       @deinterlace = false
-      @profile     = "main"
-      @passes      = 1
-      @stretch     = false
     end
 
-    def framerate=(_framerate)
-      _framerate = FrameRate.new(_framerate) unless _framerate.instance_of?(FrameRate) || _framerate.nil?
-      instance_variable_set :@framerate, _framerate
-    end
-
-    def par=(_par)
-      _par = Par.new(_par) unless _par.instance_of?(Par) || _par.nil?
-      instance_variable_set :@par, _par
+    def size=(_size)
+      _size = Size.new(_size) unless _size.instance_of?(Size) || _size.nil?
+      instance_variable_set :@size, _size
     end
   end
 
-  # The audio configs for each Medium
+  # The audio configs for each instance of +Video+
   class AudioConfig
     attr_accessor :codec, :bitrate, :channels, :samplerate
   end
 
   class Job
-    ATTRIBUTES = [:source, :userdata, :notify]
+    ATTRIBUTES = [:source, :userdata, :callback]
+
+    attr_reader :items
 
     include Enumerable
 
@@ -236,29 +138,16 @@ module UEncode
     end
 
     def initialize(options)
-      @video_output = VideoOutput.new options[:video_output] || {}
-      @captures = []
+      @items = []
       super
     end
 
-    def configure_video_output
-      yield @video_output      
-    end
-
-    def items
-      @video_output.items
-    end
-
     def <<(item)
-      @video_output.items << item
-    end
-
-    def add_capture(capture)
-      @captures << capture
+      @items << item
     end
 
     def each(&block)
-      @video_output.each &block
+      @items.each &block
     end
 
     def to_xml
@@ -267,10 +156,9 @@ module UEncode
           <customerkey>#{UEncode.customer_key}</customerkey>
           <source>#{source}</source>
           #{userdata.nil? ? "" : '<userdata>' + userdata + '</userdata>'}
-          #{notify.nil? ? "" : '<notify>' + notify + '</notify>'}
+          #{callback.nil? ? "" : '<callback>' + callback + '</callback>'}
           <outputs>
-            #{@video_output.to_xml}
-            #{@captures.inject("") { |s, cap| s << cap.to_xml }}
+            #{@items.sort_by { |i| i.class.name }.inject("") { |s, item| s << item.to_xml }}
           </outputs>
         </job>
       }
@@ -278,5 +166,5 @@ module UEncode
     end
   end
 
-  [Size, Crop, VideoOutput, CaptureOutput, Job].each { |klass| klass.send :include, AttrSetting }
+  [Size, Video, Capture, Job].each { |klass| klass.send :include, AttrSetting }
 end

@@ -6,24 +6,24 @@ module UEncode
     class ServerError     < StandardError; end
     class UnknownError    < StandardError; end
 
-    ATTRIBUTES = [:code, :message, :jobid, :userdata]
+    ATTRIBUTES = [:status, :message, :job_key, :userdata]
 
     include AttrSetting    
 
     def initialize(options)
-      check_response_code options[:code], options[:message]
+      check_response_status options[:status], options[:message]
       super
     end
 
     private
-    def check_response_code(code, message)
-      return if code == 'Ok'
-      case code
+    def check_response_status(status, message)
+      return if status == 'Ok'
+      case status
       when 'BadRequest'; raise BadRequestError, message
       when 'InvalidKey'; raise InvalidKeyError, message
       when 'NotActive'; raise NotActiveError, message
       when 'ServerError'; raise ServerError, message
-      else raise UnknownError, "#{code}: #{message}"
+      else raise UnknownError, "#{status}: #{message}"
       end
     end
   end

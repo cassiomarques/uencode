@@ -1,39 +1,42 @@
 --- 
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
-    method: :put
-    uri: https://www.uencode.com:443/jobs?version=300
+    method: :post
+    uri: http://204.14.178.5:80/job
     body: |
       <?xml version="1.0"?>
       <job>
-                <customerkey>1q2w3e4r5t</customerkey>
+                <customerkey>zopufzgyd7</customerkey>
                 <source>http://dailydigital-files.s3.amazonaws.com/staging/3/iphone.mp4</source>
                 <userdata>This is a simple test</userdata>
-                
+                <callback>cassiomarques@dailydigital.com</callback>
                 <outputs>
                   
-              <output>
-                <video>
-                  <destination>http://dailydigital-files.s3.amazonaws.com/staging/3/iphone_transcoded.mp4</destination>
-                  <container>mpeg4</container>
-                  <media>
-                    
-              <medium>
+              <capture>
+                <rate>at 60s</rate>
+                <destination>http://dailydigital-files.s3.amazonaws.com/staging/3/iphone_capture.jpg</destination>
+                
+              <size>
+                <width>640</width>
+                <height>480</height>
+              </size>
+            
+              </capture>
+            
+              <video>
+                <destination>http://dailydigital-files.s3.amazonaws.com/staging/3/iphone_transcoded.mp4</destination>
+                <container>mpeg4</container>
                 <video>
                   <bitrate>300000</bitrate>
                   <codec>h264</codec>
-                  <cbr>false</cbr>
-                  
                   <deinterlace>false</deinterlace>
                   
                   
-                  
-                  
-                  
-                  <profile>main</profile>
-                  <passes>1</passes>
-                  
-                  
+              <size>
+                <width>640</width>
+                <height>480</height>
+              </size>
+            
                 </video>
                 <audio>
                   <codec>aac</codec>
@@ -41,13 +44,8 @@
                   <channels>1</channels>
                   <samplerate>44100</samplerate>
                 </audio>
-              </medium>
+              </video>
             
-                  </media>
-                </video>
-              </output>
-            
-                  
                 </outputs>
               </job>
 
@@ -58,30 +56,41 @@
       message: OK
     headers: 
       date: 
-      - Wed, 18 May 2011 21:25:41 GMT
+      - Tue, 02 Aug 2011 20:44:05 GMT
       server: 
-      - Apache/2.2.16 (Ubuntu)
+      - Apache/2.2.17 (Ubuntu)
       etag: 
-      - "\"1c1e90e26e3f60eeb74014a6aeb5ac22\""
+      - "\"faf24ce63f4d2b9137d99fb52dd7646b\""
       cache-control: 
       - max-age=0, private, must-revalidate
       x-ua-compatible: 
       - IE=Edge,chrome=1
       set-cookie: 
-      - _uencode_api_session=BAh7BiIPc2Vzc2lvbl9pZCIlOWM4ZWM4ZGUxMzNiNTNiNWZiOWMwMDA4ODkzMmY3ZWI%3D--697ce08be3ca2a9f6347474fe7fe5476333e9408; path=/; HttpOnly
+      - _uencode_api_session=BAh7BiIPc2Vzc2lvbl9pZCIlN2E1NDRmYWY0Zjk3ZjIyMWQ3M2RiY2RkZDJiYTE2MTk%3D--fd2067555ecbefcbb17cba7a9f89312baa6c4373; path=/; HttpOnly
       x-runtime: 
-      - "1.007000"
+      - "0.515000"
       content-length: 
-      - "202"
+      - "559"
       content-type: 
       - application/xml;charset=utf-8
     body: |
       <?xml version="1.0" encoding="UTF-8"?>
       <response>
-        <code>Ok</code>
-        <jobid>6068</jobid>
-        <message>You job was created successfully.</message>
-        <userdata>This is a simple test</userdata>
+        <status>Ok</status>
+        <job>
+          <key>68074e2a55912eb4fb092bc6668e6ce3</key>
+          <userdata>This is a simple test</userdata>
+          <outputs>
+            <capture>
+              <destination>dailydigital-files.s3.amazonaws.com/staging/3/iphone_capture.jpg</destination>
+              <key>3689bc85c85a89d8d071d0893d00f585</key>
+            </capture>
+            <video>
+              <destination>/staging/3/iphone_transcoded.mp4</destination>
+              <key>6d1a4d9f5b84b2df240faf1dced389c7</key>
+            </video>
+          </outputs>
+        </job>
       </response>
 
     http_version: "1.1"
