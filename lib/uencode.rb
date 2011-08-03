@@ -33,3 +33,4 @@ end
 require "uencode/elements"
 require "uencode/request"
 require "uencode/response"
+require "uencode/callback"
