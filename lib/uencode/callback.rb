@@ -1,37 +1,38 @@
 module UEncode
-  class Callback 
+  class Callback
     class Item
-      attr_reader :key, :destination, :status, :error_message, :started, :completed
+      ATTRIBUTES = [:key, :destination, :status, :error_message, :started, :completed, :bytes]
 
-      def initialize(xml)
-        @doc           = Nokogiri::XML(xml)
-        @key           = @doc.xpath("//key").text
-        @destination   = @doc.xpath("//destination").text
-        @status        = @doc.xpath("//status").text
-        @error_message = @doc.xpath("//error_message").text
-        @started       = Date.parse(@doc.xpath("//started").text)
-        @completed     = Date.parse(@doc.xpath("//completed").text)
+      include AttrSetting
+
+      def bytes
+        @bytes.to_i
+      end
+
+      def completed
+        DateTime.parse @completed
+      end
+
+      def started
+        DateTime.parse @started
       end
     end
 
-    class Video < Item 
-      attr_reader :bytes
+    ATTRIBUTES = [:key, :status, :userdata, :started, :completed]
 
-      def initialize(xml)
-        super
-        @bytes = @doc.xpath("//bytes").text.to_i
-      end
-    end
+    include AttrSetting
 
+    class Video   < Item ; end
     class Capture < Item; end
 
-    attr_reader :key, :status, :userdata, :started, :completed, :items
-
-    def initialize(xml)
-      @doc   = Nokogiri::XML(xml)
-      @items = []
-      set_job_attributes
+    def initialize(options)
+      super
+      @options = options
       create_output_results
+    end
+
+    def items
+      @items ||= []
     end
 
     def videos
@@ -42,26 +43,26 @@ module UEncode
       items.select { |item| item.instance_of?(Capture) }
     end
 
-    private
-    def set_job_attributes
-      @key       = @doc.xpath("//callback/key[1]").text
-      @status    = @doc.xpath("//callback/status[1]").text
-      @userdata  = @doc.xpath("//callback/userdata").text
-      @started   = Date.parse(@doc.xpath("//callback/started[1]").text)
-      @completed = Date.parse(@doc.xpath("//callback/completed[1]").text)
+    def completed
+      DateTime.parse @completed
     end
 
+    def started
+      DateTime.parse @started
+    end
+
+    private
     def create_output_results
       create_video_output_results
       create_capture_output_results
     end
 
     def create_video_output_results
-      @doc.xpath("//outputs/video").each { |video_xml| @items << Video.new(video_xml.to_xml) } 
+      items << Video.new(@options["outputs"]["video"])
     end
 
     def create_capture_output_results
-      @doc.xpath("//outputs/capture").each { |capture_xml| @items << Capture.new(capture_xml.to_xml) } 
+      items << Capture.new(@options["outputs"]["capture"])
     end
   end
 end
