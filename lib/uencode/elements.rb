@@ -238,6 +238,7 @@ module UEncode
     def initialize(options)
       @video_output = VideoOutput.new options[:video_output] || {}
       @captures = []
+      @customerkey = options[:customerkey]
       super
     end
 
@@ -264,7 +265,7 @@ module UEncode
     def to_xml
       xml = %Q{
         <job>
-          <customerkey>#{UEncode.customer_key}</customerkey>
+          <customerkey>#{@customerkey || UEncode.customer_key}</customerkey>
           <source>#{source}</source>
           #{userdata.nil? ? "" : '<userdata>' + userdata + '</userdata>'}
           #{notify.nil? ? "" : '<notify>' + notify + '</notify>'}
