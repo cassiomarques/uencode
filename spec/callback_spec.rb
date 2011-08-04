@@ -62,4 +62,20 @@ describe UEncode::Callback do
       its(:completed) { should == DateTime.parse("2011-08-02T16:45:11+00:00") }
     end
   end
+
+  context "raises no errors when no capture information is given" do
+    before { hash["outputs"].delete "capture" }
+
+    it "raises no errors" do
+      expect { subject }.to_not raise_error
+    end
+  end
+
+  context "raises no errors when no video information is given" do
+    before { hash["outputs"].delete "video" }
+
+    it "raises no errors" do
+      expect { subject }.to_not raise_error
+    end
+  end
 end
