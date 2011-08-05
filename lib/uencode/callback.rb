@@ -18,7 +18,7 @@ module UEncode
       end
     end
 
-    ATTRIBUTES = [:key, :status, :userdata, :started, :completed]
+    ATTRIBUTES = [:key, :status, :userdata, :started, :completed, :error_message]
 
     include AttrSetting
 

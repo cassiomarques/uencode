@@ -7,6 +7,7 @@ describe UEncode::Callback do
     "userdata"=>"39",
     "started"=>"2011-08-03T14:54:59+00:00",
     "completed"=>"2011-08-03T14:57:26+00:00",
+    "error_message" => "Whatever",
     "outputs"=>{
       "capture"=>{
         "key"=>"51c505b08854c5600c3397da5fd7c4c2",
@@ -36,6 +37,7 @@ describe UEncode::Callback do
   its(:userdata) { should == "39" }
   its(:started) { should == DateTime.parse("2011-08-03T14:54:59+00:00") }
   its(:completed) { should == DateTime.parse("2011-08-03T14:57:26+00:00") }
+  its(:error_message) { should == "Whatever" }
 
   describe "#videos" do
     context "video output" do
