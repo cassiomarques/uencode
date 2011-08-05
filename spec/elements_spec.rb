@@ -443,18 +443,11 @@ describe UEncode::Job do
   end
 
   describe "#to_xml" do
-    let(:job) { UEncode::Job.new({
-      :customerkey => "0123456789",
-      :source      => "http://whatever.com/foo.avi",
-      :userdata    => "some text",
-      :notify      => "http://notify.me/meh"
-    })}
-
     let(:xml) { Nokogiri::XML job.to_xml }
 
     before :each do
-      video1 = UEncode::Medium.new
-      video1.configure_video do |c|
+        video1 = UEncode::Medium.new
+        video1.configure_video do |c|
         c.bitrate = 1000
         c.codec   = 'mp4'
       end
@@ -483,50 +476,71 @@ describe UEncode::Job do
       job.add_capture capture2
     end
 
-    it "has a root element named 'job'" do
-      xml.root.name.should == 'job'
+    context 'overridden customer' do
+      let(:job) { UEncode::Job.new({
+        :customerkey => "0123456789",
+        :source      => "http://whatever.com/foo.avi",
+        :userdata    => "some text",
+        :notify      => "http://notify.me/meh"
+      })}
+      
+      it "has the correct overridden customer key value" do
+        xml.xpath("//job/customerkey").text.should == "0123456789"
+      end      
     end
 
-    it "has the correct customer key value" do
-      xml.xpath("//job/customerkey").text.should == "1q2w3e4r5t"
-    end
-
-    it "has the correct source attribute" do
-      xml.xpath("//job/source").text.should == "http://whatever.com/foo.avi"
-    end
-
-    it "has the correct user data value" do
-      xml.xpath("//job/userdata").text.should == 'some text'
-    end
-
-    it "has the correct notify value" do
-      xml.xpath("//job/notify").text.should == "http://notify.me/meh"
-    end
-
-    it "does not include the userdata attribute when it's null" do
-      job.instance_variable_set :@userdata, nil
-      xml.xpath("//job/userdata").should be_empty
-    end
-
-    it "does not include the notify attribute when it's null" do
-      job.instance_variable_set :@notify, nil
-      xml.xpath("//job/notify").should be_empty
-    end
-
-    it "contains the correct content to represent each video output item" do
-      xml.xpath("//job/outputs/output/video/media/medium").length.should == 2
-    end
-
-    it "has the correct video output destination" do
-      xml.xpath("//job/outputs/output/video/destination").text.should == "http://whatever.com/foo1.mp4"
-    end
-
-    it "has the correct video output container" do
-      xml.xpath("//job/outputs/output/video/container").text.should == "mpeg4"
-    end
-
-    it "contains the correct content to represent the video captures" do
-      xml.xpath("//job/outputs/output/capture").length.should == 2
+    context 'default customer' do
+      let(:job) { UEncode::Job.new({
+        :source      => "http://whatever.com/foo.avi",
+        :userdata    => "some text",
+        :notify      => "http://notify.me/meh"
+      })}
+  
+      it "has a root element named 'job'" do
+        xml.root.name.should == 'job'
+      end
+  
+      it "has the correct default configured customer key value" do
+        xml.xpath("//job/customerkey").text.should == "1q2w3e4r5t"
+      end
+  
+      it "has the correct source attribute" do
+        xml.xpath("//job/source").text.should == "http://whatever.com/foo.avi"
+      end
+  
+      it "has the correct user data value" do
+        xml.xpath("//job/userdata").text.should == 'some text'
+      end
+  
+      it "has the correct notify value" do
+        xml.xpath("//job/notify").text.should == "http://notify.me/meh"
+      end
+  
+      it "does not include the userdata attribute when it's null" do
+        job.instance_variable_set :@userdata, nil
+        xml.xpath("//job/userdata").should be_empty
+      end
+  
+      it "does not include the notify attribute when it's null" do
+        job.instance_variable_set :@notify, nil
+        xml.xpath("//job/notify").should be_empty
+      end
+  
+      it "contains the correct content to represent each video output item" do
+        xml.xpath("//job/outputs/output/video/media/medium").length.should == 2
+      end
+  
+      it "has the correct video output destination" do
+        xml.xpath("//job/outputs/output/video/destination").text.should == "http://whatever.com/foo1.mp4"
+      end
+  
+      it "has the correct video output container" do
+        xml.xpath("//job/outputs/output/video/container").text.should == "mpeg4"
+      end
+  
+      it "contains the correct content to represent the video captures" do
+        xml.xpath("//job/outputs/output/capture").length.should == 2
+      end
     end
   end
 end
