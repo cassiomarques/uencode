@@ -5,8 +5,8 @@ module UEncode
     def to_xml
       %Q{
         <size>
-          <width>#{width}</width>
-          <height>#{height}</heignt>
+          #{!width.nil? ? '<width>' + width.to_s + '</width>' : ""}
+          #{!height.nil? ? '<height>' + height.to_s + '</height>' : ""}
         </size>
       }
     end

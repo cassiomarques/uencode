@@ -206,18 +206,36 @@ describe UEncode::Size do
   its(:width) { should == 100 }
 
   describe "#to_xml" do
-    let(:xml) { Nokogiri::XML described_class.new(:width => 200, :height => 250).to_xml }
+    context "when both width and height are informed" do
+      let(:xml) { Nokogiri::XML described_class.new(:width => 200, :height => 250).to_xml }
 
-    it "has a root element named 'size'" do
-      xml.root.name.should == 'size'
+      it "has a root element named 'size'" do
+        xml.root.name.should == 'size'
+      end
+
+      it "has the correct value for the width attribute" do
+        xml.xpath("//width").text.should == "200"
+      end
+
+      it "has the correct value for the height attribute" do
+        xml.xpath("//height").text.should == "250"
+      end
     end
 
-    it "has the correct value for the width attribute" do
-      xml.xpath("//width").text.should == "200"
+    context "when only the height is informed" do
+      let(:xml) { Nokogiri::XML described_class.new(:height => 250).to_xml }  
+
+      it "do not add a width tag" do
+        xml.xpath("//width").should be_empty
+      end
     end
 
-    it "has the correct value for the height attribute" do
-      xml.xpath("//height").text.should == "250"
+    context "when only the width is informed" do
+      let(:xml) { Nokogiri::XML described_class.new(:width => 200).to_xml }  
+
+      it "do not add a height tag" do
+        xml.xpath("//height").should be_empty
+      end
     end
   end
 end
