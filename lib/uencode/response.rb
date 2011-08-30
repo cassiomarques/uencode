@@ -17,7 +17,7 @@ module UEncode
 
     private
     def check_response_status(status, message)
-      return if status == 'Ok'
+      return if status.downcase == 'ok'
       case status
       when 'BadRequest'; raise BadRequestError, message
       when 'InvalidKey'; raise InvalidKeyError, message

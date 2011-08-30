@@ -43,6 +43,22 @@ describe UEncode::Response do
         expect { response }.to raise_error(UEncode::Response::UnknownError, "Ffffuuuuu: whatever")
       end
     end
+
+    context "when initialized with a 'Ok' status" do
+      let(:status) { 'Ok' }
+
+      it "raises no error" do
+        expect { response }.to_not raise_error
+      end
+    end
+
+    context "when initialized with a 'OK' status" do
+      let(:status) { 'OK' }
+
+      it "raises no error" do
+        expect { response }.to_not raise_error
+      end
+    end
   end
 
 end
