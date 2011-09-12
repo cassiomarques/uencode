@@ -58,11 +58,11 @@ module UEncode
     end
 
     def create_video_output_results
-      items << Video.new(@options["outputs"]["video"]) if @options["outputs"]["video"]
+      items << Video.new(@options["outputs"]["video"]) if @options["outputs"] && @options["outputs"]["video"]
     end
 
     def create_capture_output_results
-      items << Capture.new(@options["outputs"]["capture"]) if @options["outputs"]["capture"]
+      items << Capture.new(@options["outputs"]["capture"]) if @options["outputs"] && @options["outputs"]["capture"]
     end
   end
 end
