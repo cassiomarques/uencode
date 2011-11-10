@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = "uencode"
   s.version     = UEncode::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Cássio Marques"]
+  s.authors     = ["Cassio Marques"]
   s.email       = ["cassiommc@gmail.com"]
   s.homepage    = "http://github.com/cassiomarques/uencode"
   s.summary     = %q{Simple UEncode API client written in Ruby}
