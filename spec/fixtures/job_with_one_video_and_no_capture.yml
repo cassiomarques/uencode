@@ -2,7 +2,7 @@
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
-    uri: http://204.14.178.5:80/job
+    uri: https://api.uencode.com/300/jobs
     body: |
       <?xml version="1.0"?>
       <job>

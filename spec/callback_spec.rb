@@ -4,8 +4,11 @@ describe UEncode::Callback do
   let(:hash) { {
     "key"=>"68074e2a55912eb4fb092bc6668e6ce3",
     "status"=>"Warning",
+    "progress" => "1.00",
+    "paralllelism" => "3.92",
     "userdata"=>"39",
     "started"=>"2011-08-03T14:54:59+00:00",
+    "created"=>"2011-08-03T14:54:59+00:00",
     "completed"=>"2011-08-03T14:57:26+00:00",
     "error_message" => "Whatever",
     "outputs"=>{

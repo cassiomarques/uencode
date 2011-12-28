@@ -143,7 +143,7 @@ describe UEncode::Video do
     end
 
     it "has the correct destination value" do
-      xml.xpath("//video/destination").text.should == "http://foo.com/bar.mp4"
+      xml.xpath("//video/destinations/destination").text.should == "http://foo.com/bar.mp4"
     end
 
     it "has the correct container value" do
@@ -301,10 +301,6 @@ describe UEncode::Job do
       xml.root.name.should == 'job'
     end
 
-    it "has the correct customer key value" do
-      xml.xpath("//job/customerkey").text.should == "1q2w3e4r5t"
-    end
-
     it "has the correct source attribute" do
       xml.xpath("//job/source").text.should == "http://whatever.com/foo.avi"
     end
@@ -332,8 +328,8 @@ describe UEncode::Job do
     end
 
     it "has the correct video output destination" do
-      xml.xpath("//job/outputs/video[1]/destination").text.should == "http://whatever.com/foo2.mp4"
-      xml.xpath("//job/outputs/video[2]/destination").text.should == "http://whatever.com/foo1.mp4"
+      xml.xpath("//job/outputs/video[1]/destinations/destination").text.should == "http://whatever.com/foo2.mp4"
+      xml.xpath("//job/outputs/video[2]/destinations/destination").text.should == "http://whatever.com/foo1.mp4"
     end
 
     it "has the correct video output container" do

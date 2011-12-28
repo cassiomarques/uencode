@@ -1,8 +1,7 @@
 module UEncode
   class Request
     include HTTParty
-
-    base_uri "http://204.14.178.5"
+    base_uri "https://api.uencode.com"
     format :xml
     
     def initialize(job)
@@ -10,7 +9,7 @@ module UEncode
     end
 
     def send
-      response = self.class.post "/job", :body => @job.to_xml
+      response = self.class.post "/300/jobs", :body => @job.to_xml, :headers => {"Authentication" => UEncode.customer_key}
       parse_response response
     end
 

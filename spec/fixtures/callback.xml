@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job key="0123456789abcdef0123456789abcdef">
+  <userdata>ANY_USEFUL_DATA_TO_YOU</userdata>
+  <created>2011-10-28T16:38:05+00:00</created>
+  <started>2011-10-28T16:38:14+00:00</started>
+  <completed>2011-10-28T16:43:20+00:00</completed>
+  <duration>306</duration>
+  <status>Complete</status>
+  <result>Ok</result>
+  <progress>1.00</progress>
+  <parallelism>3.92</parallelism>
+  <source key="0123456789abcdef0123456789abcdef">
+    <url>http://www.myserver.com/myfile.mov</url>
+    <started>2011-10-28T16:38:14+00:00</started>
+    <completed>2011-10-28T16:38:41+00:00</completed>
+    <duration>27</duration>
+    <status>Complete</status>
+    <result>Ok</result>
+    <rate>2429.39</rate>
+    <size>67167867</size>
+  </source>
+  <outputs>
+    <capture key="0123456789abcdef0123456789abcdef">
+      <started>2011-10-28T16:38:44+00:00</started>
+      <completed>2011-10-28T16:39:05+00:00</completed>
+      <duration>21</duration>
+      <status>Complete</status>
+      <result>Ok</result>
+      <progress>1.00</progress>
+      <size>100852</size>
+      <destinations>
+        <destination key="0123456789abcdef0123456789abcdef">
+          <url>http://www.myserver.com/output_frame.jpg</url>
+          <started>2011-10-28T16:39:19+00:00</started>
+          <completed>2011-10-28T16:39:19+00:00</completed>
+          <status>Complete</status>
+          <result>Ok</result>
+        </destination>
+      </destinations>
+    </capture>
+    <video key="0123456789abcdef0123456789abcdef">
+      <started>2011-10-28T16:38:48+00:00</started>
+      <completed>2011-10-28T16:43:20+00:00</completed>
+      <duration>272</duration>
+      <status>Complete</status>
+      <result>Ok</result>
+      <progress>1.00</progress>
+      <size>34407432</size>
+      <destinations>
+        <destination key="0123456789abcdef0123456789abcdef">
+          <url>ftp://ftp.myserver.com/output_2000.mp4</url>
+          <started>2011-10-28T16:43:31+00:00</started>
+          <completed>2011-10-28T16:43:43+00:00</completed>
+          <duration>12</duration>
+          <status>Complete</status>
+          <result>Ok</result>
+          <rate>2800.08</rate>
+        </destination>
+        <destination key="0123456789abcdef0123456789abcdef">
+          <url>ftp://ftp.myserver2.com/output_2000.mp4</url>
+          <started>2011-10-28T16:43:31+00:00</started>
+          <completed>2011-10-28T16:44:07+00:00</completed>
+          <duration>36</duration>
+          <status>Complete</status>
+          <result>Ok</result>
+          <rate>933.36</rate>
+        </destination>
+      </destinations>
+    </video>
+  </outputs>
+</job>

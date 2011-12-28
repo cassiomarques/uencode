@@ -88,7 +88,9 @@ module UEncode
     def to_xml
       %Q{
         <video>
-          <destination>#{destination}</destination>
+          <destinations>
+            <destination>#{destination}</destination>
+          </destinations>
           <container>#{container}</container>
           <video>
             <bitrate>#{video.bitrate}</birate>
@@ -153,7 +155,6 @@ module UEncode
     def to_xml
       xml = %Q{
         <job>
-          <customerkey>#{UEncode.customer_key}</customerkey>
           <source>#{source}</source>
           #{userdata.nil? ? "" : '<userdata>' + userdata + '</userdata>'}
           #{callback.nil? ? "" : '<callback>' + callback + '</callback>'}
